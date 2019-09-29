@@ -9,16 +9,23 @@ $( document ).ready(function() {
             }
          }
       });
-    
+    function getName(id){
+        return $.ajax({
+            url: 'http://' + location.hostname + ':5001/api/v1/users/' + id,
+            type: 'GET',
+
+        });
+    }
     $.ajax({
         url: 'http://' + location.hostname + ':5001/api/v1/places_search/',
         type: 'POST',
         contentType: "application/json",
         data: JSON.stringify({ }),
         success: function (data) {
-          //alert("ready");
-          $.each(data, function() {
-           $(".places").append(
+          $.each(data, async function() {
+            let nombre = await getName(this.user_id);
+            console.log(nombre);
+            $(".places").append(
                 '<article>\
                 <div class="title">\
                 <h2>' + this.name + '</h2>\
@@ -39,7 +46,7 @@ $( document ).ready(function() {
                 </div>\
                 </div>\
                 <div class="user">\
-                <strong>Owner:  + users[place.user_id] + </strong>\
+                <strong>Owner: ' + nombre + '</strong>\
                 </div>\
                 <div class="description">' + this.description + '</div>\
                 </article>'
