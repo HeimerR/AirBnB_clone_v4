@@ -15,17 +15,17 @@ $(document).ready(function () {
 
     });
   }
-  function loadPlaces (params={}) {
-  $.ajax({
-    url: 'http://' + window.location.hostname + ':5001/api/v1/places_search/',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(params),
-    success: function (data) {
-      $.each(data, async function () {
-        const nombre = await getName(this.user_id);
-        $('.places').append(
-          '<article>' +
+  function loadPlaces (params = {}) {
+    $.ajax({
+      url: 'http://' + window.location.hostname + ':5001/api/v1/places_search/',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(params),
+      success: function (data) {
+        $.each(data, async function () {
+          const nombre = await getName(this.user_id);
+          $('.places').append(
+            '<article>' +
             '<div class="title">' +
             '<h2>' + this.name + '</h2>' +
             '<div class="price_by_night">' + this.price_by_night + '</div>' +
@@ -49,10 +49,10 @@ $(document).ready(function () {
             '</div>' +
             '<div class="description">' + this.description + '</div>' +
             '</article>'
-        );
-      });
-    }
-  });
+          );
+        });
+      }
+    });
   }
   const checked = {};
   loadPlaces(checked);
@@ -66,13 +66,13 @@ $(document).ready(function () {
       if (Object.keys(checked).length === 0) {
         $('.amenities h4').html('&nbsp;');
       } else {
-        console.log(checked);
         $('.amenities h4').text(Object.values(checked));
       }
     });
-  $('BUTTON').click( function (checked) {
-   let params = {'amenities': Object.keys(checked)}
-   loadPlaces(params);
-   //console.log(params);
+  $('BUTTON').click(function () {
+    const params = { amenities: Object.keys(checked) };
+    $('.places article').remove();
+    loadPlaces(params);
+    console.log(params);
   });
 });
